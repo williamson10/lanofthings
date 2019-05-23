@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+  {% block content %}
+    {% if data %}
+      <div class="container">
+        <div class='row'>
+          <div>
+            <div class='row'>
+                <h1>{{ data['alias'] }}</h1> 
+                <div class="ml-auto btn-group h-50" role="group"">
+                  <button type="button" class="btn btn-primary btn-sm" data-toggle="button">X</button>
+                  <button type="button" class="btn btn-primary btn-sm " data-toggle="button"><i class="fas fa-edit    "></i></button>
+                  <button type="button" class="btn btn-primary btn-sm" data-toggle="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                </div>
+            </div>
+            <div class='row'>
+                Desc: {{ data['dev_name'] }}
+            </div>
+            <div class='row'>
+                Model: {{data['model'] }}
+            </div>
+            <div>{{data}}</div>
+          </div>
+        </div>
+      </div>
+        
+        
+    {% else %}
+        <h1>No Plug Found</h1>
+    {% endif %}
+
+    
+  {% endblock %}
+
+

@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+  {% block content %}
+  <div class='row'>
+    <div class="col-10">
+      <h1>Devices</h1>
+    </div>
+    <div class='col-2 my-auto'>
+      <div class="ml-auto btn-group h-50  mr-3" role="group">
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#adddevice"><i class="fa fa-plus"> Add New</i></button>
+      </div>
+      <div class="ml-auto btn-group h-50 my-auto mr-3" role="group">
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="button" onclick="$('#gridview').show(); $('#tableview').hide()"><i class="fa fa-th"></i></button>
+        <button type="button" class="btn btn-primary btn-sm " data-toggle="button" onclick="$('#tableview').show(); $('#gridview').hide()"><i class="fa fa-list"></i></button>
+      </div>
+    </div>
+  </div>
+    {% if data %}
+    <div class='row' id="gridview">
+      {% for plug in data %}
+        <div class='col col-12 col-sm-6 col-md-4 col-lg-2'>
+          <div class="card text-white bg-dark h-100">
+            <div class="card-header">
+              {{data[plug].name}} 
+              <div class="dropdown float-right">
+                <button class="btn btn-dark p-0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="/device/{{data[plug].ip}}">Details</a>
+                  <a class="dropdown-item" href="#">Edit</a>
+                  <a class="dropdown-item" href="/remove/{{plug}}">Delete</a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title" hidden>Secondary card title</h5>
+              <p class="card-text">
+                <ul hidden>
+                  <li>Model: {{data[plug].model}} </li>
+                  <li>Type: {{data[plug].type}}</li>
+                  <li>IP: {{data[plug].ip}}</li>
+                </ul>
+              </p>
+            </div>
+            <a href="/togglepower/{{data[plug].ip}}" class="btn btn-secondary pull-right" id="device{{plug}}"><i class="fas fa-power-off"></i></a>
+          </div>
+        </div>
+      {% endfor %}  
+    <!-- Add new device -->
+
+    </div> 
+    <div class='row' id="tableview">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">State</th>
+            <th scope="col">Handle</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for plug in data %}
+            <tr>
+              <td>{{data[plug].name}}</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+          {%endfor%}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+        <h1>No Devices Found</h1>
+    {% endif %}
+    <!-- Modal -->
+      <div class="modal fade" id="adddevice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title" id="exampleModalLabel">Add New Device</h2>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action='/add' method="POST">
+                <div class="form-group">
+                  <label for="deviceip">IP Address</label>
+                  <input type="test" class="form-control" name="deviceip" id="deviceip" aria-describedby="deviceipHelp" placeholder="Enter IP Address">
+                  <small id="deviceipHelp" class="form-text text-muted">Device info will be scanned and added.</small>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+          </div>
+        </div>
+      </div>
+{% endblock %}
+
+
+{% block js %}
+  <script>
+     $("#tableview").hide();
+
+    $(document).ready(function() {
+      {% for plug in data %}      
+        $.getJSON('/ison/{{data[plug].ip}}', function(ison) {
+          if(ison){
+            $("#device{{plug}}").removeClass('btn-dark').addClass('btn-success');
+          };
+        });
+      {% endfor %} 
+    });   
+  </script>
+{% endblock %}
+
+
