@@ -1,24 +1,17 @@
-from flask import Flask
-from flask import request
-from flask import render_template
-from flask import redirect
-from tplink_smartplug import plug
 import json, time
+from flask import Flask, request, render_template, redirect
+from tplink_smartplug import plug
 
 app = Flask(__name__)
 
+# Device Details
 @app.route('/device/<ip>')
 def plugdata(ip=None):
     pluginfo = json.loads(plug( ip, 'info'))
     data = pluginfo['system']['get_sysinfo']
     return render_template('details.html', data=data)
 
-@app.route('/og')
-def devicelist():
-    with open('devices.txt') as f:
-        data = f.read().splitlines()
-    return render_template('index.html', data=data)
-
+#Add Device
 @app.route('/add', methods=['POST', 'GET'])
 def adddevice():
     if request.method == 'POST':
@@ -44,7 +37,7 @@ def adddevice():
     else:    
         return redirect('/devices')
 
-
+#Remove Device
 @app.route('/remove/<id>', methods=['GET'])
 def removedevice(id):
     with open('devices.json') as f:
@@ -55,6 +48,7 @@ def removedevice(id):
     return redirect('/devices')
     #return render_template('debug.html', data=currentdata)
 
+#Check if On
 @app.route('/ison/<ip>')
 def ison(ip=None):
     pluginfo = json.loads(plug( ip, 'info'))
@@ -63,19 +57,19 @@ def ison(ip=None):
         return json.dumps(True)
     elif relay_state == 0:
         return json.dumps(False)
-
+#List Devices
 @app.route('/devices')
 def devices():
     with open('devices.json') as f:
         data = json.loads(f.read())
     return render_template('devices.html', data=data)
-
+#Home
 @app.route('/')
 def index():
     #with open('devices.json') as f:
         #data = json.loads(f.read())
     return render_template('index.html')
-
+#Toggle Power State
 @app.route('/togglepower/<ip>')
 def poweron(ip=None):
     pluginfo = json.loads(plug( ip, 'info'))
