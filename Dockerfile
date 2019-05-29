@@ -7,6 +7,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 5001
+EXPOSE 5000
+ENTRYPOINT ["python"]
+CMD ["app.py"]
 
-CMD [ "flask run -h 0.0.0.0 -p 5001" ]
