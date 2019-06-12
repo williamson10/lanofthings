@@ -16,7 +16,8 @@ flask run
 
 ## Deployment
 
-TODO: Docker deployment 
+Docker Image is now available: [LOTServer](https://hub.docker.com/r/williamson10/lot-server)
+Data is saved in the same directory as the app. This still needs to be separated out.
 
 ## Built With
 
