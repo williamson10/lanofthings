@@ -4,9 +4,6 @@ from tplink_smartplug import plug
 
 app = Flask(__name__)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0')
-
 # Device Details
 @app.route('/device/<ip>')
 def plugdata(ip=None):
@@ -83,3 +80,7 @@ def poweron(ip=None):
     elif relay_state == 0:
         plug(ip, "on")
         return redirect('/devices')
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
