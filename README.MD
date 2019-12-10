@@ -1,3 +1,4 @@
+# This is no longer being developed after finding [HomeAssistant](https://www.home-assistant.io/)
 # LOT-Server
 
 This is a POC project for disconnecting IOT devices from the internet and controlling them locally. Currently supports TP-Link smart plugs. As I get devices I will likely add support for them to this project.
